@@ -1,0 +1,112 @@
+
+===== B1 GET /requests =====
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   462  100   462    0     0  26227      0 --:--:-- --:--:-- --:--:-- 27176
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 462
+ETag: W/"1ce-UeWGg57KI0WDFqS2DC2oeTJY0HY"
+Date: Thu, 20 Aug 2026 17:51:28 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+[{"id":1,"title":"Projector does not turn on","description":"The projector in room 204 shows no image during class.","status":"open","priority":"high"},{"id":2,"title":"Broken chair in the lab","description":"One chair in the computer lab has a loose back rest.","status":"in-progress","priority":"medium"},{"id":3,"title":"Wi-Fi drops in the library","description":"The connection drops every few minutes on the second floor.","status":"open","priority":"low"}]
+
+===== B2 GET /requests/1 =====
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 150
+ETag: W/"96-df4rlkwXJG0/cHPmZF1L5gR5rfI"
+Date: Thu, 20 Aug 2026 17:51:28 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   150  100   150    0     0  23607      0 --:--:-- --:--:-- --:--:-- 25000
+{"id":1,"title":"Projector does not turn on","description":"The projector in room 204 shows no image during class.","status":"open","priority":"high"}
+
+===== B3 GET /requests/999 =====
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100    29  100    29    0     0   5022      0 --:--:-- --:--:-- --:--:--  5800
+HTTP/1.1 404 Not Found
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 29
+ETag: W/"1d-P5l7jokQoptb6vUGaJB1Jdokrdc"
+Date: Thu, 20 Aug 2026 17:51:29 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"error":"Request not found"}
+
+===== B4 POST /requests con titulo =====
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   267  100   131  100   136   4396   4564 --:--:-- --:--:-- --:--:--  9206
+HTTP/1.1 201 Created
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 131
+ETag: W/"83-NBcGYt3ukCd3yGsYZt6csC1vzVY"
+Date: Thu, 20 Aug 2026 17:51:29 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"id":4,"title":"Leaking faucet","description":"The faucet in the third floor bathroom leaks.","status":"open","priority":"medium"}
+
+===== B5 POST /requests sin titulo =====
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100    99  100    29  100    70   3305   7979 --:--:-- --:--:-- --:--:-- 12375
+HTTP/1.1 400 Bad Request
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 29
+ETag: W/"1d-53lIJ95lGl3GPLg/Tko6BPJr+/c"
+Date: Thu, 20 Aug 2026 17:51:29 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"error":"Title is required"}
+
+===== B6 GET /getRequests (debe dar 404) =====
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   150  100   150    0     0  25248      0 --:--:-- --:--:-- --:--:-- 30000
+HTTP/1.1 404 Not Found
+X-Powered-By: Express
+Content-Security-Policy: default-src 'none'
+X-Content-Type-Options: nosniff
+Content-Type: text/html; charset=utf-8
+Content-Length: 150
+Date: Thu, 20 Aug 2026 17:51:29 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET /getRequests</pre>
+</body>
+</html>

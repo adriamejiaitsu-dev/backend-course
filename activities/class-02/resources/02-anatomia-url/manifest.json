@@ -1,0 +1,41 @@
+{
+  "title": "Anatomía de una URL",
+  "materia": "desarrollo-backend",
+  "clase": "class-02",
+  "sesion": "02-anatomia-url",
+  "nextSection": "materias/desarrollo-backend/clases/class-02/sesiones/03-anatomia-peticion",
+  "nextSectionTitle": "Anatomía de una petición",
+  "styles": [
+    "materias/desarrollo-backend/clases/class-01/viewer-bundle-class01.css",
+    "materias/desarrollo-backend/clases/class-02/viewer-bundle-class02.css"
+  ],
+  "slides": [
+    {
+      "title": "Una URL tiene partes con oficios distintos",
+      "file": "slides/01.html",
+      "notes": "### Propósito\nInstalar la idea de que una URL no es una cadena opaca: es una dirección compuesta, y cada tramo responde a una pregunta distinta del contrato.\n\n### Explicación sugerida\nProyectar la URL completa antes de nombrar nada y pedir que la lean en voz alta. Luego recorrer la lámina de izquierda a derecha, un tramo por vez, sin adelantar el siguiente. El orden importa: primero *cómo* se habla (protocolo), después *con quién* (host y puerto), y sólo entonces *sobre qué* (ruta) y *con qué condiciones* (query string).\n\n### Ejemplo\nUsar siempre el mismo sistema: `http://localhost:3000/requests/42?include=comments` pide la solicitud 42 del sistema de gestión de solicitudes, e indica además que se quieren incluir sus comentarios. Señalar que el `42` no es \"un número\": es el identificador de una solicitud concreta.\n\n### Preguntas para el grupo\n1. ¿Qué parte cambiaría si el servidor estuviera en otra máquina?\n2. ¿Qué parte cambiaría si escuchara en el puerto `4000`?\n3. ¿Qué parte cambiaría si quisiera la solicitud `7` en lugar de la `42`?\n\n### Respuestas esperadas\n* Suelen acertar host y puerto sin problema.\n* En la tercera pregunta algunos responden \"la URL entera\": conviene precisar que sólo cambia un tramo de la ruta, y que el resto del contrato queda igual.\n\n### Errores frecuentes\n* Confundir URL con endpoint. Aquí decir sólo que la URL es la dirección; el endpoint aparece cuando se combina con un método, y eso se ve en el bloque siguiente.\n* Creer que el puerto es parte del nombre de la máquina.\n\n### Conceptos que no se profundizan todavía\nNo abrir codificación de caracteres en URLs, ni DNS, ni puertos reservados. Si alguien pregunta por `https` o por qué a veces no se ve el puerto, responder en una frase y anotarlo para más adelante.\n\n### Transición\n\"Ya sabemos cómo se llama cada parte. Ahora miremos qué diferencia hay entre las dos últimas.\"\n\n### Tiempo\n4 min",
+      "activities": [
+        {
+          "title": "Lab: anatomía de una URL",
+          "type": "lab",
+          "src": "resources/labs/anatomia-url/lab.json"
+        }
+      ]
+    },
+    {
+      "title": "Identificar no es lo mismo que filtrar",
+      "file": "slides/02.html",
+      "notes": "### Propósito\nSeparar dos usos de la URL que los estudiantes tienden a mezclar: señalar un recurso concreto y acotar una colección.\n\n### Explicación sugerida\nMostrar primero sólo las dos peticiones y pedir una predicción antes de descubrir las columnas de abajo: ¿cuántas solicitudes devuelve cada una? Recoger dos o tres respuestas en voz alta y sólo entonces explicar. La diferencia clave es que `/requests/42` fracasa si el 42 no existe, mientras que `/requests?status=open` puede devolver una lista vacía y seguir siendo una respuesta correcta.\n\n### Ejemplo\n`GET /requests/42` pide *esa* solicitud. `GET /requests?status=open` pide *todas* las solicitudes abiertas. Si en el sistema no hay ninguna abierta, la segunda devuelve una lista vacía; no es un fallo.\n\n### Preguntas para el grupo\nUsar las dos preguntas abiertas de la lámina. La segunda es la más productiva: ¿podría `/requests/42` devolver una lista?\n\n### Respuestas esperadas\n* \"Devuelve una sola\" / \"devuelve varias\" — correcto, reforzar el porqué.\n* Alguien dirá que una lista vacía es un error. Ahí conviene adelantar, sin desarrollarlo, que el bloque de códigos de estado distingue \"no hay nada que coincida\" de \"eso no existe\".\n\n### Errores frecuentes\n* Confundir query con path parameter: pensar que `/requests/42` y `/requests?id=42` son intercambiables. Explicar que la primera nombra un recurso y la segunda describe una búsqueda; en la práctica el contrato se vuelve ambiguo si se mezclan.\n* Creer que la query string sirve para enviar datos de creación. Eso se corrige en el bloque de peticiones.\n\n### Conceptos que no se profundizan todavía\nNo entrar en múltiples parámetros combinados, ni en paginación, ni en cómo se leen desde el código. El bloque 06 se ocupa de `req.params` y `req.query`.\n\n### Transición\n\"Probemos si la distinción se sostiene con cuatro direcciones más.\"\n\n### Tiempo\n4 min"
+    },
+    {
+      "title": "Clasifica estas cuatro direcciones",
+      "file": "slides/03.html",
+      "notes": "### Propósito\nComprobar en el grupo, y no en la exposición, que la distinción recurso / identificador / modificador se puede aplicar a cualquier URL.\n\n### Explicación sugerida\nDar dos minutos de trabajo en parejas y luego resolver en voz alta fila por fila. No dictar las respuestas: pedir que las digan y corregir sólo cuando haga falta. Escribir las respuestas en la pizarra o repetirlas en voz alta, porque la columna de la lámina está intencionadamente vacía.\n\n### Respuestas esperadas\n1. `/requests` — recurso: solicitudes · identificador: ninguno · modificadores: ninguno. Es la colección completa.\n2. `/requests/15` — recurso: solicitudes · identificador: `15` · modificadores: ninguno.\n3. `/requests?priority=high` — recurso: solicitudes · identificador: ninguno · modificadores: `priority=high`.\n4. `/requests/15?include=comments` — recurso: solicitudes · identificador: `15` · modificadores: `include=comments`.\n\n### Preguntas para el grupo\n* ¿Cuál de las cuatro devuelve como máximo un elemento?\n* ¿Cuáles dos hablan de la misma colección con distinto alcance?\n* En la cuarta, ¿el `include=comments` cambia *cuál* recurso o *cómo* se representa?\n\n### Errores frecuentes\n* Marcar `high` como identificador. Aclarar que identifica un criterio, no un recurso.\n* Decir que la cuarta URL tiene dos recursos. Es un recurso con un modificador de representación.\n* Confundir URL con endpoint otra vez: recordar que aquí sólo estamos leyendo direcciones, todavía sin método.\n\n### Conceptos que no se profundizan todavía\nNo discutir aún si `include=comments` es buena práctica ni cómo se implementa. Sólo se está leyendo la estructura.\n\n### Transición\n\"Cerremos el bloque con la frase que resume las cuatro filas.\"\n\n### Tiempo\n3 min"
+    },
+    {
+      "title": "Ruta y query: dos preguntas distintas",
+      "file": "slides/04.html",
+      "notes": "### Propósito\nCerrar el bloque con una sola frase memorizable y dejar abierta la pregunta que abre el bloque siguiente.\n\n### Explicación sugerida\nLeer la frase en voz alta y detenerse en la nota inferior: la URL nunca dice qué queremos hacer. Preguntar directamente: si escribo `/requests/42`, ¿estoy consultándola, borrándola o modificándola? La URL no lo distingue. Ese vacío es exactamente lo que resuelve el método HTTP.\n\n### Ejemplo\nEscribir en la pizarra `/requests/42` tres veces seguidas y preguntar cuál de las tres es una consulta. Ninguna se puede distinguir: falta información.\n\n### Preguntas para el grupo\n* ¿Qué información falta en la dirección para saber la intención?\n* ¿Dónde creen que viaja esa información?\n\n### Respuestas esperadas\n* Muchos dirán \"en el nombre de la ruta\", proponiendo algo como `/deleteRequest/42`. No corregirlo aún: anotarlo, porque el bloque 04 lo retoma directamente al comparar rutas con verbo contra rutas con sustantivo.\n* Algunos ya dirán \"el método\" si vienen de la clase 1.\n\n### Errores frecuentes\n* Creer que un endpoint es sólo una ruta. Insistir en que un endpoint es la combinación de método más ruta, y que por eso `/requests` puede ser dos endpoints distintos.\n\n### Conceptos que no se profundizan todavía\nNo formalizar todavía qué método corresponde a cada intención; sólo dejar planteada la carencia.\n\n### Transición\nPasar al bloque 3: abrir la petición completa y ver dónde encaja la URL dentro del mensaje.\n\n### Tiempo\n1 min"
+    }
+  ]
+}

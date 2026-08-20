@@ -1,0 +1,122 @@
+{
+  "title": "HTTP no es la única conversación",
+  "materia": "desarrollo-backend",
+  "clase": "class-02",
+  "sesion": "08-otros-protocolos",
+  "nextSection": "materias/desarrollo-backend/clases/class-02/sesiones/09-proyecto-lite",
+  "nextSectionTitle": "Proyecto Lite",
+  "styles": [
+    "materias/desarrollo-backend/clases/class-01/viewer-bundle-class01.css",
+    "materias/desarrollo-backend/clases/class-02/viewer-bundle-class02.css"
+  ],
+  "slides": [
+    {
+      "title": "No todo lo que suena parecido es lo mismo",
+      "file": "slides/01.html",
+      "notes": "### Propósito\nOrdenar por categorías los nombres que el grupo escucha mezclados, para que puedan ubicarlos aunque no los usen todavía. Este bloque construye criterio, no dominio técnico: no se implementa nada.\n\n### Explicación sugerida\nRecorrer la tabla por categoría, no por nombre. El transporte mueve bytes entre máquinas y no sabe qué significan. Un protocolo acuerda la forma de los mensajes: HTTP es uno, pero no el único. REST no es un protocolo sino un estilo para diseñar sobre HTTP. GraphQL es un lenguaje de consulta con un runtime que lo ejecuta. gRPC es un modelo y framework de llamadas RPC que habitualmente usa HTTP/2. SSE es un flujo de eventos que usa HTTP. Express y Socket.IO son librerías: no aportan protocolo, aportan comodidad.\n\n### Preguntas para el grupo\n* ¿En qué categoría cae Express? ¿Y HTTP?\n* Si alguien dice \"nuestra API usa REST y HTTP\", ¿está diciendo dos cosas del mismo nivel?\n\n### Respuestas esperadas\n* Express es librería; HTTP es protocolo. Que lo digan con esas palabras.\n* No son del mismo nivel: HTTP es el protocolo, REST es cómo se decidió diseñar encima.\n\n### Errores frecuentes\n* Llamar REST a cualquier API que devuelva JSON.\n* Llamar protocolo a GraphQL.\n* Pensar que elegir librería es elegir protocolo.\n\n### Conceptos que no se profundizan todavía\nNo se explica el modelo de capas de red, ni QUIC en detalle, ni las restricciones formales de REST. Se nombran para ubicar.\n\n### Transición\n\"Con las categorías claras, veamos las frases falsas que circulan.\"\n\n### Tiempo\n3 min"
+    },
+    {
+      "title": "Frases que circulan y son falsas",
+      "file": "slides/02.html",
+      "notes": "### Propósito\nDesactivar explícitamente cinco confusiones muy extendidas, nombrándolas como falsas antes de que se instalen.\n\n### Explicación sugerida\nLeer cada tarjeta en voz alta como afirmación falsa y dar la corrección corta que está debajo. No extenderse: el objetivo es que reconozcan la frase cuando la escuchen, no que puedan debatirla en profundidad. Vale contar que estas frases aparecen en entrevistas, documentación apurada y publicaciones de redes.\n\n### Preguntas para el grupo\n* ¿Alguna de estas cinco la habías dado por cierta?\n* Si SSE usa HTTP, ¿qué es exactamente lo que cambia respecto de una respuesta normal?\n\n### Respuestas esperadas\n* Es normal que varias les resultaran ciertas; conviene decirlo para que nadie se sienta expuesto.\n* En SSE la respuesta no se cierra: el servidor sigue escribiendo eventos sobre esa misma respuesta.\n\n### Errores frecuentes\n* Creer que binario significa encriptado. Binario es una forma de representar; cifrado es otra cosa y depende de TLS.\n* Creer que gRPC es JSON con otro nombre.\n* Asumir que WebSocket siempre es mejor para cualquier función \"en vivo\".\n\n### Conceptos que no se profundizan todavía\nNo entramos en el handshake de WebSocket, ni en el formato de eventos de SSE, ni en las restricciones de REST.\n\n### Transición\n\"Si ninguna es la respuesta universal, ¿cómo se elige? Empezando por la necesidad.\"\n\n### Tiempo\n2 min"
+    },
+    {
+      "title": "Primero la necesidad, después la tecnología",
+      "file": "slides/03.html",
+      "notes": "### Propósito\nDar un criterio de elección legible: cada fila parte de una necesidad concreta y recién entonces nombra una alternativa.\n\n### Explicación sugerida\nLeer de izquierda a derecha, siempre en ese orden: primero el problema, después la etiqueta. Señalar que las dos primeras filas cubren la enorme mayoría del trabajo cotidiano, y que las otras cinco aparecen cuando la necesidad realmente cambia: alguien envía sin que le pregunten, ambos hablan a la vez, hay servicios internos con contratos estrictos, hay dispositivos con muy poca capacidad, o hay trabajo que debe completarse aunque nadie esté esperando. Cerrar leyendo la regla en voz alta.\n\n### Preguntas para el grupo\n* Para mostrar el progreso de un reporte que tarda dos minutos, ¿hace falta WebSocket?\n* Nuestro sistema de solicitudes, tal como lo tenemos hoy, ¿qué necesita?\n\n### Respuestas esperadas\n* No hace falta: sólo el servidor envía datos, así que SSE alcanza y es más simple.\n* Nuestro sistema necesita consultar y modificar recursos: HTTP es suficiente y es lo correcto.\n\n### Errores frecuentes\n* Elegir la tecnología por prestigio y después buscarle el problema.\n* Creer que usar HTTP es una limitación técnica y no una decisión adecuada.\n* Confundir \"tiempo real\" con \"bidireccional\". Muchas funciones en vivo son de una sola dirección.\n\n### Conceptos que no se profundizan todavía\nNo se implementa ninguna de estas alternativas hoy. Tampoco se comparan brokers, ni garantías de entrega, ni escalabilidad.\n\n### Transición\n\"Volvamos a HTTP, porque también tiene versiones. Veamos qué cambia HTTP/2.\"\n\n### Tiempo\n3 min",
+      "resources": [
+        {
+          "title": "Guía de lectura · Server-sent events",
+          "type": "markdown",
+          "src": "resources/lecturas/08-server-sent-events.md"
+        },
+        {
+          "title": "Abrir en WHATWG",
+          "type": "link",
+          "src": "https://html.spec.whatwg.org/multipage/server-sent-events.html"
+        },
+        {
+          "title": "Guía de lectura · The WebSocket Protocol",
+          "type": "markdown",
+          "src": "resources/lecturas/07-websocket-rfc6455.md"
+        },
+        {
+          "title": "Abrir RFC 6455 (IETF)",
+          "type": "link",
+          "src": "https://www.rfc-editor.org/info/rfc6455/"
+        },
+        {
+          "title": "Guía de lectura · MQTT 5.0",
+          "type": "markdown",
+          "src": "resources/lecturas/09-mqtt.md"
+        },
+        {
+          "title": "Abrir en OASIS",
+          "type": "link",
+          "src": "https://www.oasis-open.org/standard/mqtt-v5-0-os/"
+        },
+        {
+          "title": "Guía de lectura · AMQP",
+          "type": "markdown",
+          "src": "resources/lecturas/10-amqp.md"
+        },
+        {
+          "title": "Abrir en OASIS",
+          "type": "link",
+          "src": "https://www.oasis-open.org/standard/amqp/"
+        },
+        {
+          "title": "Actividad comparativa de protocolos",
+          "type": "markdown",
+          "src": "../../resources/actividad-comparativa-protocolos.md"
+        }
+      ],
+      "activities": [
+        {
+          "title": "Lab: clasificador de protocolos",
+          "type": "lab",
+          "src": "resources/labs/clasificador-protocolos/lab.json"
+        }
+      ]
+    },
+    {
+      "title": "HTTP/2: qué conserva y qué cambia",
+      "file": "slides/04.html",
+      "notes": "### Propósito\nMostrar que HTTP/2 cambia el transporte del mensaje y no su semántica, para que el contrato aprendido hoy siga siendo válido.\n\n### Explicación sugerida\nLeer primero la columna izquierda completa: métodos, URLs, headers, cuerpos y códigos de estado siguen siendo exactamente los mismos. Luego la derecha: el mensaje deja de escribirse como texto plano y pasa a enviarse en tramas binarias; varias peticiones pueden avanzar a la vez sobre una misma conexión mediante streams; los headers se comprimen. La frase que ordena todo está arriba: cambia cómo viajan, no qué dicen.\n\n### Preguntas para el grupo\n* Si migramos a HTTP/2, ¿tengo que reescribir mis rutas o mis códigos de estado?\n* ¿Qué gana el navegador con la multiplexación?\n\n### Respuestas esperadas\n* No hay que reescribir nada del contrato: `GET /requests/42` y `404` significan lo mismo.\n* Gana no tener que esperar a que termine una petición para empezar la siguiente.\n\n### Errores frecuentes\n* Creer que HTTP/2 cambia métodos y estados, o que introduce métodos nuevos.\n* Creer que binario significa encriptado. El cifrado lo aporta TLS, no el framing.\n* Suponer que el cuerpo deja de poder ser JSON.\n\n### Conceptos que no se profundizan todavía\nNo se explican en detalle las tramas, ni HPACK, ni HTTP/3 y QUIC más allá de nombrarlos.\n\n### Transición\n\"Veámoslo dibujado, que se entiende mejor que explicado.\"\n\n### Tiempo\n2 min",
+      "resources": [
+        {
+          "title": "Guía de lectura · HTTP/2 (RFC 9113)",
+          "type": "markdown",
+          "src": "resources/lecturas/05-http2-rfc9113.md"
+        },
+        {
+          "title": "Abrir RFC 9113 (RFC Editor)",
+          "type": "link",
+          "src": "https://www.rfc-editor.org/rfc/rfc9113.html"
+        }
+      ]
+    },
+    {
+      "title": "Tres peticiones, dos maneras de viajar",
+      "file": "slides/05.html",
+      "notes": "### Propósito\nHacer visible la diferencia entre esperar turno y avanzar en paralelo sobre una sola conexión.\n\n### Explicación sugerida\nSeñalar primero la columna izquierda: la petición B no empieza hasta que termina la A, y la C espera a las dos. Todo lo gris es tiempo perdido. En la derecha, las tres avanzan a la vez sobre la misma conexión, cada una en su stream, y por eso terminan antes. Aclarar que los números de stream no son consecutivos por capricho, pero no entrar en el detalle. Cerrar leyendo las advertencias de la tarjeta.\n\n### Preguntas para el grupo\n* Antes de mostrar la derecha: si tres peticiones salen juntas en HTTP/1.1, ¿cuándo termina la tercera?\n* ¿Esto cambia algo en el cuerpo JSON que enviamos?\n\n### Respuestas esperadas\n* Termina después de las otras dos: se acumula la espera. Algunos dirán que el navegador abre varias conexiones — es cierto y vale mencionarlo, pero hay un límite.\n* No cambia nada en el cuerpo: sigue siendo el mismo JSON.\n\n### Errores frecuentes\n* Creer que binario significa encriptado, o ilegible por seguridad.\n* Pensar que HTTP/2 convierte una aplicación en gRPC.\n* Suponer que HTTP/2 es automáticamente más rápido en todos los casos; depende de la red, de la cantidad de recursos y de la configuración.\n* Olvidar que normalmente sigue funcionando sobre TCP.\n\n### Conceptos que no se profundizan todavía\nNo se explica el bloqueo de cabeza de línea a nivel TCP, ni la prioridad de streams, ni el server push.\n\n### Transición\n\"Ya que nombramos gRPC dos veces, cerremos con qué es exactamente.\"\n\n### Tiempo\n2 min"
+    },
+    {
+      "title": "gRPC en una lámina",
+      "file": "slides/06.html",
+      "notes": "### Propósito\nDar una definición ordenada de gRPC que separe modelo de programación, representación de los datos y transporte. Nada se implementa.\n\n### Explicación sugerida\nEmpezar por el nombre: RPC es Remote Procedure Call, llamar a un procedimiento que vive en otra máquina como si fuera local. Por eso no se piensa en rutas y recursos sino en servicios y métodos. El contrato se declara antes de programar, en un archivo `.proto`, y de ahí se generan clientes y estructuras para varios lenguajes. Los datos viajan como Protocol Buffers, binario por defecto, y el transporte habitual es HTTP/2. Mostrar el fragmento sólo como ilustración de la forma del contrato: se lee un servicio con un método, su entrada y su salida. Cerrar leyendo la conclusión.\n\n### Preguntas para el grupo\n* ¿Qué reemplaza aquí a la ruta y al método HTTP?\n* ¿Por qué se recomienda entre servicios controlados y no para una API pública en el navegador?\n\n### Respuestas esperadas\n* Los reemplaza el servicio con sus métodos declarados; la ruta deja de ser el centro del diseño.\n* Porque ambas partes deben compartir el contrato generado, y eso es fácil cuando el mismo equipo controla los dos lados.\n\n### Errores frecuentes\n* Creer que gRPC es JSON con otro nombre, o que es simplemente \"HTTP/2 con otro estilo\".\n* Creer que binario significa encriptado.\n* Pensar que gRPC reemplaza a HTTP. Lo usa como transporte.\n\n### Conceptos que no se profundizan todavía\nNo se instala nada, no se genera código, no se comparan rendimientos. Tampoco se abren streaming bidireccional ni gRPC-Web más allá de nombrarlos.\n\n### Transición\n\"Cerramos el recorrido conceptual. Ahora aplicamos el contrato en el proyecto Lite.\"\n\n### Tiempo\n2 min",
+      "resources": [
+        {
+          "title": "Guía de lectura · Introduction to gRPC",
+          "type": "markdown",
+          "src": "resources/lecturas/06-grpc-introduccion.md"
+        },
+        {
+          "title": "Abrir en grpc.io",
+          "type": "link",
+          "src": "https://grpc.io/docs/what-is-grpc/introduction/"
+        }
+      ]
+    }
+  ]
+}

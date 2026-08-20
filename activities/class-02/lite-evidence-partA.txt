@@ -1,0 +1,129 @@
+
+===== A1 GET /getRequests =====
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   462  100   462    0     0  24941      0 --:--:-- --:--:-- --:--:-- 27176
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 462
+ETag: W/"1ce-UeWGg57KI0WDFqS2DC2oeTJY0HY"
+Date: Thu, 20 Aug 2026 17:49:14 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+[{"id":1,"title":"Projector does not turn on","description":"The projector in room 204 shows no image during class.","status":"open","priority":"high"},{"id":2,"title":"Broken chair in the lab","description":"One chair in the computer lab has a loose back rest.","status":"in-progress","priority":"medium"},{"id":3,"title":"Wi-Fi drops in the library","description":"The connection drops every few minutes on the second floor.","status":"open","priority":"low"}]
+
+===== A1b GET /requests =====
+HTTP/1.1 404 Not Found
+X-Powered-By: Express
+Content-Security-Policy: default-src 'none'
+X-Content-Type-Options: nosniff
+Content-Type: text/html; charset=utf-8
+Content-Length: 147
+Date: Thu, 20 Aug 2026 17:49:14 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET /requests</pre>
+</body>
+</html>
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   147  100   147    0     0  19776      0 --:--:-- --:--:-- --:--:-- 21000
+
+===== A2 GET /requests/1 =====
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   150  100   150    0     0  21111      0 --:--:-- --:--:-- --:--:-- 21428
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 150
+ETag: W/"96-df4rlkwXJG0/cHPmZF1L5gR5rfI"
+Date: Thu, 20 Aug 2026 17:49:14 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"id":1,"title":"Projector does not turn on","description":"The projector in room 204 shows no image during class.","status":"open","priority":"high"}
+
+===== A3 GET /requests/999 =====
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100    29  100    29    0     0   6788      0 --:--:-- --:--:-- --:--:--  7250
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 29
+ETag: W/"1d-P5l7jokQoptb6vUGaJB1Jdokrdc"
+Date: Thu, 20 Aug 2026 17:49:14 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"error":"Request not found"}
+
+===== A4 POST /requests valida =====
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   267  100   131  100   136    272    282 --:--:-- --:--:-- --:--:--   556
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 131
+ETag: W/"83-NBcGYt3ukCd3yGsYZt6csC1vzVY"
+Date: Thu, 20 Aug 2026 17:49:14 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"id":4,"title":"Leaking faucet","description":"The faucet in the third floor bathroom leaks.","status":"open","priority":"medium"}
+
+===== A5 POST /requests sin titulo =====
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   143  100    73  100    70  15240  14613 --:--:-- --:--:-- --:--:-- 35750
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 73
+ETag: W/"49-11k5sNUo43Yne3/XAmKGsVdxDHE"
+Date: Thu, 20 Aug 2026 17:49:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"id":5,"description":"No title at all","status":"open","priority":"low"}
+
+===== A6 GET /getRequests despues de A4/A5 =====
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   668  100   668    0     0   167k      0 --:--:-- --:--:-- --:--:--  217k
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 668
+ETag: W/"29c-Gq2xVTxwNTgVJLqP0M3bize6dZA"
+Date: Thu, 20 Aug 2026 17:49:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+[{"id":1,"title":"Projector does not turn on","description":"The projector in room 204 shows no image during class.","status":"open","priority":"high"},{"id":2,"title":"Broken chair in the lab","description":"One chair in the computer lab has a loose back rest.","status":"in-progress","priority":"medium"},{"id":3,"title":"Wi-Fi drops in the library","description":"The connection drops every few minutes on the second floor.","status":"open","priority":"low"},{"id":4,"title":"Leaking faucet","description":"The faucet in the third floor bathroom leaks.","status":"open","priority":"medium"},{"id":5,"description":"No title at all","status":"open","priority":"low"}]

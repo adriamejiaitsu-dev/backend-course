@@ -1,0 +1,14 @@
+{
+  "name": "request-api-full",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Starter template for the Request API Full project",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

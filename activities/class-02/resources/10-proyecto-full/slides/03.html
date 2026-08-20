@@ -1,0 +1,52 @@
+<section class="slide" data-slide="3" data-type="content">
+  <div class="slide-content">
+    <div class="slide-header">
+      <span class="slide-number">03</span>
+      <h2>El protocolo de uso de IA</h2>
+    </div>
+    <div class="slide-body">
+      <p class="slide-intro" style="margin-bottom:0.75rem;">Primero se escribe la especificación. Después se pide. Nunca al revés.</p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; align-items:start;">
+        <div class="code-block code-block--sm">
+          <div class="code-head">
+            <span class="code-file">spec.txt</span>
+            <span class="code-step">Antes de pedirle nada a la IA</span>
+          </div>
+          <pre style="font-size:0.7rem; line-height:1.45;">Resource: Request
+Endpoints:
+- GET /requests
+- GET /requests/:id
+- POST /requests
+Expected statuses:
+- 200 for successful queries
+- 201 when a request is created
+- 400 when required data is missing
+- 404 when a request does not exist
+Representation:
+- JSON
+Storage:
+- In memory
+Excluded:
+- Database, Authentication, TypeScript
+- Controllers, Services, Repository
+- Update and delete operations</pre>
+        </div>
+
+        <div>
+          <p class="slide-intro" style="margin-bottom:0.6rem;">Y después se revisa lo que devolvió.</p>
+          <div class="open-questions" style="grid-template-columns:1fr;">
+            <p class="open-question"><span class="oq-mark">?</span> ¿Respetó el <strong>alcance</strong>?</p>
+            <p class="open-question"><span class="oq-mark">?</span> ¿Creó exactamente esos <strong>endpoints</strong>?</p>
+            <p class="open-question"><span class="oq-mark">?</span> ¿Devuelve los <strong>estados</strong> acordados?</p>
+            <p class="open-question"><span class="oq-mark">?</span> ¿Organizó las <strong>responsabilidades</strong>?</p>
+            <p class="open-question"><span class="oq-mark">?</span> ¿Añadió <strong>dependencias</strong> innecesarias?</p>
+            <p class="open-question"><span class="oq-mark">?</span> ¿<strong>Inventó</strong> funcionalidades?</p>
+            <p class="open-question"><span class="oq-mark">?</span> ¿Puedo <strong>explicar</strong> cada archivo?</p>
+            <p class="open-question"><span class="oq-mark">?</span> ¿Puedo <strong>ejecutar</strong> cada caso?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

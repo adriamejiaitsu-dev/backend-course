@@ -1,0 +1,53 @@
+{
+  "title": "Métodos como intenciones",
+  "materia": "desarrollo-backend",
+  "clase": "class-02",
+  "sesion": "04-metodos-intenciones",
+  "nextSection": "materias/desarrollo-backend/clases/class-02/sesiones/05-respuesta-estados",
+  "nextSectionTitle": "Anatomía de una respuesta y códigos de estado",
+  "styles": [
+    "materias/desarrollo-backend/clases/class-01/viewer-bundle-class01.css",
+    "materias/desarrollo-backend/clases/class-02/viewer-bundle-class02.css"
+  ],
+  "slides": [
+    {
+      "title": "El método declara la intención",
+      "file": "slides/01.html",
+      "notes": "### Propósito\nPresentar los métodos como vocabulario de intenciones, no como una lista que memorizar.\n\n### Explicación sugerida\nRecordar el vacío que quedó abierto en el bloque 2: la URL no dice qué queremos hacer. El método llena exactamente ese hueco. Recorrer las cinco tarjetas nombrando primero la intención en español y sólo después el verbo en inglés: consultar, crear o iniciar una operación, modificar parcialmente, eliminar, reemplazar. `PUT` se presenta de forma conceptual: reemplaza la representación completa, y en esta clase no lo vamos a implementar.\n\n### Ejemplo\nMantener el sistema de solicitudes en todos los casos: consultar las solicitudes abiertas, crear una incidencia de proyector, cambiar sólo su estado, borrarla, o sustituirla entera por otra versión.\n\n### Preguntas para el grupo\n* Si sólo quiero cambiar el estado de la solicitud 42 de `open` a `closed`, ¿qué intención estoy expresando?\n* ¿Qué diferencia hay entre modificar parcialmente y reemplazar?\n\n### Respuestas esperadas\n* Modificar parcialmente: `PATCH`. Suele salir bien si se ha nombrado la intención antes que el verbo.\n* En la segunda pregunta muchos no ven diferencia. Explicarla con una frase: en `PATCH` envío sólo el campo que cambia; en `PUT` envío el objeto completo y lo que no mande desaparece.\n\n### Errores frecuentes\n* Creer que `POST` siempre significa \"crear una fila\". `POST` también inicia operaciones que no crean nada, como enviar una notificación. Por eso la tarjeta dice \"crear o iniciar una operación\".\n* Creer que `DELETE` lleva cuerpo con el identificador. El identificador va en la ruta.\n\n### Conceptos que no se profundizan todavía\nNo formalizar restricciones REST, ni idempotencia, ni códigos de estado asociados a cada método. Tampoco métodos como `HEAD` u `OPTIONS`.\n\n### Transición\n\"Pongamos las cinco intenciones una debajo de otra y miremos qué se repite.\"\n\n### Tiempo\n4 min",
+      "resources": [
+        {
+          "title": "Guía de lectura · HTTP request methods",
+          "type": "markdown",
+          "src": "resources/lecturas/02-metodos-http.md"
+        },
+        {
+          "title": "Abrir en MDN Web Docs",
+          "type": "link",
+          "src": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods"
+        }
+      ]
+    },
+    {
+      "title": "La misma dirección, cinco operaciones",
+      "file": "slides/02.html",
+      "notes": "### Propósito\nHacer visible, con evidencia en pantalla, que sólo dos direcciones bastan para cinco operaciones distintas.\n\n### Explicación sugerida\nAntes de mostrar las columnas inferiores, pedir al grupo que diga qué se repite y qué cambia. Es una observación, no una definición: sólo hay dos rutas, `/requests` y `/requests/42`, y cinco líneas. Después leer la regla del bloque en voz alta y dejarla escrita en la pizarra, porque el bloque siguiente y el proyecto la usan constantemente.\n\n### Ejemplo\nSeñalar el par `GET /requests` frente a `POST /requests`: misma dirección exacta, dos endpoints completamente distintos. Ese par es la mejor demostración de que endpoint no es sólo una ruta.\n\n### Preguntas para el grupo\n* ¿Cuántas rutas distintas hay en pantalla? ¿Y cuántas operaciones?\n* ¿Por qué `/requests` aparece dos veces y no es un error?\n* ¿Qué pasaría si un `GET` borrara algo?\n\n### Respuestas esperadas\n* Dos rutas, cinco operaciones. Esa asimetría es el punto de la lámina.\n* Sobre el `GET` que borra: normalmente responden \"que estaría mal\". Basta con nombrar la consecuencia: cualquier cosa que recorra enlaces (un navegador, un buscador, un precargador) podría destruir datos sin que nadie lo pidiera.\n\n### Errores frecuentes\n* Creer que hacen falta rutas distintas para cada operación. Es exactamente lo que corrige la lámina siguiente.\n* Confundir URL con endpoint: aquí conviene decirlo explícitamente, porque la evidencia está en pantalla.\n\n### Conceptos que no se profundizan todavía\nEl comentario sobre `GET` se menciona y se deja ahí: no formalizar aún seguridad ni idempotencia.\n\n### Transición\n\"Muchos servidores reales no siguen esta regla. Miremos las dos formas lado a lado.\"\n\n### Tiempo\n5 min",
+      "activities": [
+        {
+          "title": "Lab: clasificador de métodos",
+          "type": "lab",
+          "src": "resources/labs/clasificador-metodos/lab.json"
+        }
+      ]
+    },
+    {
+      "title": "Dos formas de escribir el mismo contrato",
+      "file": "slides/03.html",
+      "notes": "### Propósito\nComparar dos estilos de diseño de rutas sin convertir uno en dogma, y justificar la preferencia con un argumento verificable.\n\n### Explicación sugerida\nLeer primero la columna izquierda como si fuera normal, porque lo es: muchas APIs reales funcionan así y probablemente han usado alguna. Después preguntar qué habría que añadir para cerrar una solicitud, para reabrirla y para archivarla. En la izquierda hacen falta tres nombres nuevos que alguien debe inventar, documentar y recordar. En la derecha basta con el método adecuado sobre el recurso que ya existe.\n\n### Ejemplo\nPedir al grupo que invente el nombre de la ruta para \"reabrir una solicitud\" en el estilo de la izquierda. Van a salir `/reopenRequest`, `/requestReopen`, `/openRequestAgain`. Ese desacuerdo es la demostración del problema: ninguno es incorrecto, y por eso hay que memorizarlo.\n\n### Preguntas para el grupo\n* ¿Qué tiene de raro `POST /deleteRequest`?\n* Si mañana entra alguien nuevo al equipo, ¿qué columna puede adivinar sin leer documentación?\n\n### Respuestas esperadas\n* Sobre `POST /deleteRequest`: el método dice \"crear o iniciar\" y la ruta dice \"borrar\". El mensaje se contradice a sí mismo.\n* Sobre la persona nueva: la derecha, porque el vocabulario ya está definido por HTTP.\n\n### Errores frecuentes\n* Entender la lámina como \"la izquierda está prohibida\". Insistir: no lo está. El criterio es consistencia y previsibilidad, no obediencia.\n* Pasarse al otro extremo e intentar forzar toda operación a un método, incluso las que no encajan. Reconocer que existen casos difíciles y que se verán con más contexto.\n\n### Conceptos que no se profundizan todavía\nNo nombrar REST como conjunto de restricciones formales, ni discutir versionado de APIs o diseño de recursos anidados.\n\n### Transición\n\"Una última observación antes de pasar a las respuestas.\"\n\n### Tiempo\n4 min"
+    },
+    {
+      "title": "Comprobación: repetir la misma petición",
+      "file": "slides/04.html",
+      "notes": "### Propósito\nDejar sembrada, con una observación concreta y sin terminología, la idea de que repetir una operación no siempre tiene el mismo efecto.\n\n### Explicación sugerida\nDar cuarenta y cinco segundos en parejas y recoger respuestas sin corregir de inmediato. La comparación se explica sola: tres `POST /requests` dejan tres solicitudes distintas, porque cada envío pide crear una nueva. Tres `DELETE /requests/42` dejan el sistema igual que después del primero, porque la solicitud 42 ya no está.\n\n### Ejemplo\nAsociarlo a algo que han vivido: pulsar dos veces el botón de enviar en un formulario y acabar con el pedido duplicado. Ese es el mismo fenómeno.\n\n### Preguntas para el grupo\n* ¿Y tres veces `GET /requests/42`?\n* ¿Qué debería responder el servidor al segundo `DELETE`, si la solicitud ya no existe?\n\n### Respuestas esperadas\n* `GET` repetido no cambia nada: sólo consulta.\n* Sobre el segundo `DELETE` suelen dudar entre \"error\" y \"todo bien\". No cerrar la discusión aquí: el bloque siguiente da el vocabulario de estados para responderla.\n\n### Errores frecuentes\n* Creer que repetir cualquier petición es siempre inofensivo.\n* Creer que el servidor \"recuerda\" que ya se pidió antes. Cada petición se atiende por separado; la memoria entre peticiones es otro tema.\n\n### Conceptos que no se profundizan todavía\nAquí se nombra el fenómeno, no la palabra. La idempotencia se profundiza más adelante, igual que el estado entre peticiones.\n\n### Transición\nPasar al bloque 5: ya sabemos preguntar bien; ahora hay que aprender a leer lo que el servidor responde.\n\n### Tiempo\n2 min"
+    }
+  ]
+}

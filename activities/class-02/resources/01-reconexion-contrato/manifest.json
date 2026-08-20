@@ -1,0 +1,51 @@
+{
+  "title": "Reconexión y HTTP como contrato",
+  "materia": "desarrollo-backend",
+  "clase": "class-02",
+  "sesion": "01-reconexion-contrato",
+  "nextSection": "materias/desarrollo-backend/clases/class-02/sesiones/02-anatomia-url",
+  "nextSectionTitle": "Anatomía de una URL",
+  "styles": [
+    "materias/desarrollo-backend/clases/class-01/viewer-bundle-class01.css",
+    "materias/desarrollo-backend/clases/class-02/viewer-bundle-class02.css"
+  ],
+  "slides": [
+    {
+      "title": "HTTP: el contrato entre cliente y servidor",
+      "file": "slides/01.html",
+      "notes": "### Propósito\nAbrir la clase anunciando el salto: de \"existe una petición y una respuesta\" a \"puedo leer, diseñar y evaluar el contrato\".\n\n### Explicación sugerida\nDecir la pregunta conductora en voz alta: ¿cómo expresa el cliente lo que quiere y cómo comunica el servidor lo que ocurrió? La portada ya muestra los dos mensajes: hoy los vamos a abrir por dentro.\n\n### Diferencia con la clase 1\nAvisar al grupo que esta clase es más expositiva: se presentan conceptos y se comprueban de inmediato con un ejemplo. No habrá un único laboratorio al final; habrá comprobaciones constantes.\n\n### Conceptos que no se profundizan todavía\nNo abrir REST, ni bases de datos, ni autenticación. Si alguien pregunta, anotarlo como tema de clases siguientes.\n\n### Tiempo\n2 min"
+    },
+    {
+      "title": "Volvamos al servidor que construimos",
+      "file": "slides/02.html",
+      "notes": "### Propósito\nReconectar con la clase 1 sin repetirla, y mostrar que lo que veíamos era incompleto.\n\n### Explicación sugerida\nRecordar que el servidor respondía a `/health` y `/api/info`. Señalar que veíamos un `200` y un `Content-Type`, pero nunca preguntamos qué significaban exactamente ni de dónde salía cada parte del mensaje.\n\n### Preguntas para el grupo\nUsar las cuatro de la lámina, en orden, sin responderlas todavía. Bastan respuestas breves.\n\n### Respuestas esperadas\n* \"Por la URL\" — parcialmente correcto: la URL dice el recurso, no la intención.\n* Sobre el `200` suelen decir \"que salió bien\". Ahí conviene preguntar: ¿bien en qué sentido? ¿que el servidor respondió, o que hizo lo que pedimos?\n\n### Errores frecuentes\nConfundir \"el servidor respondió\" con \"la operación tuvo éxito\". Ese matiz se resuelve en el bloque de códigos de estado.\n\n### Transición\n\"Ya conocemos el viaje. Ahora estudiaremos el lenguaje que se usa durante ese viaje.\"\n\n### Tiempo\n5 min"
+    },
+    {
+      "title": "HTTP es un contrato",
+      "file": "slides/03.html",
+      "notes": "### Propósito\nPresentar HTTP directamente como protocolo y como contrato, con su estructura mínima.\n\n### Explicación sugerida\nUn protocolo es un acuerdo sobre la forma de los mensajes. Su valor está en que el cliente y el servidor pueden haber sido escritos por personas distintas, en lenguajes distintos, y aun así entenderse. Recalcar que el cliente siempre inicia: el servidor no llama al navegador por su cuenta (eso se retoma en el bloque de protocolos).\n\n### Ejemplo\nSi hay tiempo, mencionar que el navegador, `curl` y una app móvil hablan el mismo HTTP contra el mismo servidor.\n\n### Conceptos que deben quedar claros\n* El cliente inicia.\n* Cada mensaje tiene estructura.\n* Petición: intención, recurso, contexto, datos.\n* Respuesta: resultado, contexto, datos.\n\n### Errores frecuentes\nCreer que Express inventó HTTP. Aclarar desde ya que HTTP existe con o sin framework.\n\n### Tiempo\n5 min",
+      "resources": [
+        {
+          "title": "Guía de lectura · Overview of HTTP",
+          "type": "markdown",
+          "src": "resources/lecturas/01-overview-http.md"
+        },
+        {
+          "title": "Abrir en MDN Web Docs",
+          "type": "link",
+          "src": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview"
+        }
+      ]
+    },
+    {
+      "title": "Misma intención, distinto resultado",
+      "file": "slides/04.html",
+      "notes": "### Propósito\nMostrar con un caso concreto que el contrato debe expresar tanto el éxito como el fallo.\n\n### Explicación sugerida\nLas dos peticiones son casi idénticas: mismo método, misma forma de ruta, sólo cambia el identificador. Lo que cambia es el resultado. Señalar que en ambos casos el servidor respondió correctamente: responder `404` no es un error del servidor, es informar honestamente.\n\n### Predicción antes de revelar\nAntes de mostrar la segunda respuesta, preguntar: si pido el 99 y no existe, ¿qué debería responder el servidor? Recoger dos o tres respuestas.\n\n### Respuestas esperadas\nAlgunos dirán \"un mensaje de error\" sin mencionar el estado. Otros dirán `404`. Aprovechar para adelantar que el estado y el cuerpo cumplen funciones distintas.\n\n### Errores frecuentes\nPensar que `404` significa que el servidor falló. Separar \"el servidor no funcionó\" de \"el recurso no existe\".\n\n### Transición\n\"Antes de seguir con el mensaje completo, miremos la parte que identifica el recurso: la URL.\"\n\n### Tiempo\n6 min"
+    },
+    {
+      "title": "Comprobación: ¿quién tiene la razón?",
+      "file": "slides/05.html",
+      "notes": "### Propósito\nCerrar el bloque instalando la idea de contrato como acuerdo compartido, no como opinión de una de las partes.\n\n### Explicación sugerida\nDejar que respondan y luego cerrar: ninguno de los dos tiene la razón por sí mismo. La razón está en el contrato: si el mensaje admite dos lecturas, el contrato está mal definido. Ese es el trabajo de hoy — aprender a definirlo sin ambigüedad.\n\n### Respuestas esperadas\n* \"El servidor, porque es el que tiene los datos\" — rebatir: el cliente podría estar leyendo bien un contrato mal escrito.\n* \"Depende de la documentación\" — muy buena, lleva directo a la idea de contrato explícito.\n\n### Transición\nPasar al bloque 2: la anatomía de una URL.\n\n### Tiempo\n2 min"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "title": "Del servidor nativo a Express",
+  "materia": "desarrollo-backend",
+  "clase": "class-02",
+  "sesion": "07-node-a-express",
+  "nextSection": "materias/desarrollo-backend/clases/class-02/sesiones/08-otros-protocolos",
+  "nextSectionTitle": "HTTP no es la única conversación",
+  "styles": [
+    "materias/desarrollo-backend/clases/class-01/viewer-bundle-class01.css",
+    "materias/desarrollo-backend/clases/class-02/viewer-bundle-class02.css"
+  ],
+  "slides": [
+    {
+      "title": "Lo que hacíamos a mano",
+      "file": "slides/01.html",
+      "notes": "### Propósito\nReconectar con el servidor de la clase 1 y hacer visible cuánto de aquel código era trabajo repetitivo, no decisiones de diseño.\n\n### Explicación sugerida\nRecorrer el fragmento señalando cada tarea manual: comparar el método, comparar la URL, fijar el estado, fijar el header, convertir el objeto a texto y cerrar la respuesta. Preguntar cuál de esas líneas expresa una decisión del contrato y cuál es sólo maquinaria. La decisión es \"GET /health responde 200 con JSON\"; el resto es mecánica repetida en cada ruta.\n\n### Preguntas para el grupo\n* ¿Qué parte de este código es el contrato y qué parte es trabajo mecánico?\n* ¿Cómo crecería este `if` con diez rutas y cuatro métodos?\n\n### Respuestas esperadas\n* \"Se llenaría de condiciones\" — exacto: el crecimiento es multiplicativo, rutas por métodos.\n* Alguien puede proponer separar en funciones. Buena intuición: eso es, en esencia, lo que hace un enrutador.\n\n### Errores frecuentes\nCreer que el servidor de la clase 1 estaba mal hecho. No lo estaba: funcionaba y mostraba el mecanismo real. Lo que cambia ahora es la comodidad, no la corrección.\n\n### Conceptos que no se profundizan todavía\nNo hablar aún de middlewares en general, ni de controladores, servicios o repositorios. Hoy sólo rutas y respuestas.\n\n### Transición\n\"Veamos, tarea por tarea, qué ofrece Express en lugar de cada una.\"\n\n### Tiempo\n3 min"
+    },
+    {
+      "title": "La misma conversación, menos trabajo",
+      "file": "slides/02.html",
+      "notes": "### Propósito\nMapear una por una las tareas manuales del servidor nativo con su equivalente en Express, dejando claro que el contrato no se modifica.\n\n### Explicación sugerida\nLeer la tabla de izquierda a derecha, no de arriba abajo: cada fila es la misma tarea escrita de dos maneras. Detenerse en `express.json()`: antes había que acumular los pedazos del cuerpo y convertir el texto a objeto; ahora esa conversión ocurre antes de llegar a la ruta. Cerrar con la tarjeta: método, ruta, estado, headers y cuerpo siguen existiendo exactamente igual.\n\n### Preguntas para el grupo\n* ¿Alguna fila de la derecha inventa algo que no existiera en HTTP?\n* Si mañana cambiamos de framework, ¿se cae el contrato?\n\n### Respuestas esperadas\n* Ninguna fila inventa nada: todas son formas más cortas de escribir lo mismo.\n* El contrato sobrevive al framework. Un cliente no sabe ni le importa con qué librería está escrito el servidor.\n\n### Errores frecuentes\n* Pensar que Express inventó HTTP, o que las rutas son una idea de Express. HTTP existe con o sin framework.\n* Creer que `response.json()` hace algo mágico. Fija el header `Content-Type` y convierte el objeto a texto: las dos cosas que hacíamos a mano.\n\n### Conceptos que no se profundizan todavía\nRouter se nombra en la tabla pero no se implementa hoy. Tampoco middlewares propios ni manejo de errores.\n\n### Transición\n\"Construyamos el servidor por pasos, empezando por lo mínimo.\"\n\n### Tiempo\n3 min",
+      "resources": [
+        {
+          "title": "Guía de lectura · Express routing",
+          "type": "markdown",
+          "src": "resources/lecturas/04-express-routing.md"
+        },
+        {
+          "title": "Abrir en expressjs.com",
+          "type": "link",
+          "src": "https://expressjs.com/en/guide/routing.html"
+        }
+      ],
+      "activities": [
+        {
+          "title": "Lab: Node HTTP vs Express",
+          "type": "lab",
+          "src": "resources/labs/node-vs-express/lab.json"
+        }
+      ]
+    },
+    {
+      "title": "Paso 1 · La aplicación",
+      "file": "slides/03.html",
+      "notes": "### Propósito\nEscribir el arranque mínimo de una aplicación Express y entender qué hace la única línea de configuración presente.\n\n### Explicación sugerida\nPedir la predicción antes de mostrar el código: ¿qué hace `express.json()` que antes hacíamos a mano? Recoger dos o tres respuestas y recién entonces explicar: lee el cuerpo del mensaje, comprueba que el `Content-Type` sea JSON, convierte ese texto en un objeto y lo deja disponible en `request.body`. Es exactamente el trabajo del bloque anterior: texto que viaja, objeto que se usa.\n\n### Preguntas para el grupo\n* ¿Qué hace `express.json()` que antes hacíamos a mano?\n* Sin esa línea, ¿qué esperarías encontrar en `request.body`?\n\n### Respuestas esperadas\n* \"Convierte el JSON en objeto\" — correcto, y conviene precisar: convierte el texto del cuerpo en objeto.\n* Sin la línea, `request.body` queda indefinido. Es un error muy común y produce una falla silenciosa: el servidor responde, pero con datos vacíos.\n\n### Errores frecuentes\n* Creer que `app.use()` declara una ruta. No: aplica algo a todas las peticiones.\n* Suponer que el cuerpo se lee siempre solo, sin configuración.\n\n### Conceptos que no se profundizan todavía\nQué es exactamente un middleware, el orden en que se ejecutan y `express.urlencoded()`. Se nombran si preguntan, no se desarrollan.\n\n### Transición\n\"Ya tenemos aplicación. Ahora, la primera ruta.\"\n\n### Tiempo\n3 min"
+    },
+    {
+      "title": "Paso 2 · Leer una solicitud",
+      "file": "slides/04.html",
+      "notes": "### Propósito\nDeclarar la primera ruta con path parameter y mostrar que cada trozo del código corresponde a una parte del contrato HTTP ya estudiada.\n\n### Explicación sugerida\nPredicción primero: ¿de dónde sale `:id` y quién le pone valor? Luego explicar que `:id` es un hueco declarado en la ruta; cuando llega `GET /requests/42`, Express reconoce el patrón y guarda `\"42\"` en `request.params.id`. Señalar el `Number(...)`: lo que llega de la URL es texto, siempre. Terminar recorriendo la tabla de mapeo señalando el código correspondiente en la lámina.\n\n### Preguntas para el grupo\n* ¿De dónde sale `:id`? ¿Quién le pone valor?\n* ¿Qué responde este servidor ante `GET /requests/42`?\n* ¿Y ante `POST /requests/42`?\n\n### Respuestas esperadas\n* El valor lo pone la petición del cliente; el nombre lo pone quien declara la ruta.\n* Responde `200` con un cuerpo JSON que contiene `id` y `status`.\n* Ante `POST /requests/42` no hay ruta declarada: no coincide el método, así que no entra en este manejador.\n\n### Errores frecuentes\n* Creer que `request.params.id` devuelve un número. Devuelve texto; por eso está el `Number(...)`.\n* Confundir `request.params` con `request.query`. Repasar: `:id` es parte de la ruta, `?status=` no lo es.\n* Pensar que `status(200)` y `json(...)` son dos respuestas distintas. Es un solo mensaje: estado más cuerpo.\n\n### Conceptos que no se profundizan todavía\nValidación del parámetro, búsqueda real en datos y respuesta `404` cuando no existe. Aquí los datos están fijos a propósito.\n\n### Transición\n\"Ya sabemos responder. Falta recibir datos.\"\n\n### Tiempo\n4 min"
+    },
+    {
+      "title": "Paso 3 · Crear una solicitud",
+      "file": "slides/05.html",
+      "notes": "### Propósito\nCompletar el ejemplo con una ruta que recibe cuerpo, y cerrar el bloque con la idea que ordena todo lo anterior.\n\n### Explicación sugerida\nPredicción antes del código: ¿por qué `201` y no `200`? Recordar el bloque de códigos de estado: `201` comunica que algo nuevo quedó creado. Luego señalar que `request.body` sólo tiene contenido porque en el paso 1 escribimos `express.json()`. Cerrar leyendo la conclusión en voz alta y dejándola escrita: Express reduce trabajo mecánico; no sustituye el contrato HTTP.\n\n### Preguntas para el grupo\n* ¿Por qué aquí el estado es `201` y no `200`?\n* ¿De dónde llega `request.body` y qué hizo falta para poder leerlo?\n* Si quito `express.json()` del paso 1, ¿qué falla y cómo se ve esa falla?\n\n### Respuestas esperadas\n* `201` porque se creó un recurso nuevo; `200` diría sólo \"salió bien\".\n* El cuerpo llega en el mensaje como texto JSON y se convierte en objeto antes de la ruta.\n* Sin `express.json()`, `request.body` queda indefinido y `requestData.title` rompe o llega vacío. Falla silenciosa, no error de red.\n\n### Errores frecuentes\n* Creer que Express valida los datos recibidos. No lo hace: si el cliente envía cualquier cosa, ahí queda.\n* Pensar que el `id: 43` fijo es aceptable en un servidor real. Es una simplificación deliberada para no abrir persistencia.\n* Suponer que ahora HTTP \"lo maneja el framework\" y ya no hace falta entenderlo.\n\n### Conceptos que no se profundizan todavía\nNo se introducen controladores, servicios ni repositorios. Tampoco persistencia ni identificadores generados.\n\n### Transición\n\"Toda la clase habló de HTTP. Ahora, brevemente, qué hay alrededor de HTTP.\"\n\n### Tiempo\n2 min"
+    }
+  ]
+}
