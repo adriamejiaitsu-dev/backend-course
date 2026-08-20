@@ -32,7 +32,8 @@ const requests = [
 
 let nextId = 4;
 
-app.get('/getRequests', (req, res) => {
+// The route exposes the resource by its name: /requests, not /getRequests.
+app.get('/requests', (req, res) => {
   res.json(requests);
 });
 
@@ -41,16 +42,23 @@ app.get('/requests/:id', (req, res) => {
   const request = requests.find((item) => item.id === id);
 
   if (!request) {
-    return res.json({ error: 'Request not found' });
+    return res.status(404).json({ error: 'Request not found' });
   }
 
-  res.json(request);
+  res.status(200).json(request);
 });
 
 app.post('/requests', (req, res) => {
+  // title is the only required field. A blank space is not a title.
+  const title = typeof req.body.title === 'string' ? req.body.title.trim() : '';
+
+  if (!title) {
+    return res.status(400).json({ error: 'Title is required' });
+  }
+
   const newRequest = {
     id: nextId,
-    title: req.body.title,
+    title,
     description: req.body.description,
     status: 'open',
     priority: req.body.priority
@@ -59,7 +67,8 @@ app.post('/requests', (req, res) => {
   nextId = nextId + 1;
   requests.push(newRequest);
 
-  res.status(200).json(newRequest);
+  // 201: a new resource was created.
+  res.status(201).json(newRequest);
 });
 
 app.listen(PORT, () => {
