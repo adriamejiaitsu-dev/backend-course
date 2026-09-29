@@ -7,15 +7,17 @@ import { withTransaction } from '../../database/transaction.js';
 import {
   findAll,
   findById,
+  findHistory,
   insertRequest,
   updateRequest,
   insertHistoryEvent
 } from './requests.store.js';
-import { mapRequestRow } from './request.mapper.js';
+import { mapRequestRow, mapHistoryEventRow } from './request.mapper.js';
 import { STATUSES, isValidStatus, isTerminal, canTransition } from './request-status.js';
 import {
   canListAllRequests,
   canViewRequest,
+  canViewHistory,
   canCreateRequest,
   canEditContent,
   canChangePriority,
@@ -86,6 +88,22 @@ export async function getRequest(actor, id) {
   const request = mapRequestRow(row);
   if (!canViewRequest(actor, request)) throw notFound(id);
   return request;
+}
+
+// GET /:id/history, moved out of the route in class 08. Two reads and one
+// rule: the events belong to a request the actor may see. The SQL lives in
+// the store, the visibility rule in the policy and the shape of each event
+// in the mapper — the service only decides the ORDER of the steps.
+export async function listRequestHistory(actor, id) {
+  const row = await findById(id);
+  if (!row) throw notFound(id);
+
+  // A foreign request answers exactly like a missing one: the caller
+  // cannot confirm it exists. Same code, same message.
+  if (!canViewHistory(actor, mapRequestRow(row))) throw notFound(id);
+
+  const rows = await findHistory(id);
+  return rows.map(mapHistoryEventRow);
 }
 
 export async function createRequest(actor, input) {
@@ -211,3 +229,4 @@ export async function patchRequest(actor, id, body) {
 
   return mapRequestRow(row);
 }
+
