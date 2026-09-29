@@ -44,22 +44,29 @@ export function canChangeStatus(actor) {
   return actor.role === 'agent';
 }
 
-// TODO(FEATURE-801) · Claim policy (guided skeleton).
+// Claim policy (FEATURE-801).
 //
-// The claim rule must be testable with PLAIN OBJECTS: no SQL, no JWT, no
-// Express, no HTTP errors. That is the whole point of putting it here.
+// Three denial reasons, three different HTTP answers — which is exactly
+// why this returns a REASON and not a boolean. The policy names what is
+// wrong; the service translates each reason into an AppError.
 //
-// Checklist:
-//   [ ] Receive { actor, request } (already-mapped representation).
-//   [ ] Only an agent may claim               -> reason 'NOT_AGENT'
-//   [ ] An assigned request cannot be claimed -> reason 'ALREADY_ASSIGNED'
-//   [ ] Only an open request can be claimed   -> reason 'NOT_OPEN'
-//   [ ] Otherwise: { allowed: true }
-//
-// Why an explicit result instead of a boolean? Claim has THREE distinct
-// denial reasons and each maps to a different HTTP answer (403/409/409).
-// The policy names the reason; the SERVICE translates it to an AppError.
+// The ORDER is a decision, not an accident: the role rule runs first, so
+// a requester asking for an already-assigned request is told 403 (you may
+// not claim at all) instead of 409 (it is taken). Answering the identity
+// question before the state question never leaks state to someone who was
+// never allowed to act.
 export function canClaimRequest({ actor, request }) {
-  // TODO(FEATURE-801): replace this placeholder with the real rules.
-  return { allowed: false, reason: 'NOT_IMPLEMENTED' };
+  if (actor.role !== 'agent') {
+    return { allowed: false, reason: 'NOT_AGENT' };
+  }
+  // NULL means "nobody has claimed it yet" — migration 005 is explicit
+  // about that. An absent field would read as unassigned too, so both
+  // shapes are treated as free.
+  if (request.assignedTo !== null && request.assignedTo !== undefined) {
+    return { allowed: false, reason: 'ALREADY_ASSIGNED' };
+  }
+  if (request.status !== 'open') {
+    return { allowed: false, reason: 'NOT_OPEN' };
+  }
+  return { allowed: true };
 }

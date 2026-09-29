@@ -13,7 +13,8 @@ import {
   getRequest,
   listRequestHistory,
   createRequest,
-  patchRequest
+  patchRequest,
+  claimRequest
 } from './requests.service.js';
 import { parseIdParam } from '../../http/parse-id.js';
 
@@ -38,6 +39,11 @@ router.get('/:id', async (req, res) => {
 router.get('/:id/history', async (req, res) => {
   const id = parseIdParam(req.params.id);
   res.status(200).json(await listRequestHistory(req.auth, id));
+});
+
+router.post('/:id/claim', async (req, res) => {
+  const id = parseIdParam(req.params.id);
+  res.status(200).json(await claimRequest(req.auth, id, req.body));
 });
 
 router.post('/', async (req, res) => {

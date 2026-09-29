@@ -10,6 +10,7 @@ import {
   findHistory,
   insertRequest,
   updateRequest,
+  claimRequest as claimRequestRow,
   insertHistoryEvent
 } from './requests.store.js';
 import { mapRequestRow, mapHistoryEventRow } from './request.mapper.js';
@@ -21,12 +22,18 @@ import {
   canCreateRequest,
   canEditContent,
   canChangePriority,
-  canChangeStatus
+  canChangeStatus,
+  canClaimRequest
 } from './request.policy.js';
 import { AppError } from '../../app-error.js';
 
 const PRIORITIES = ['low', 'medium', 'high'];
 const UPDATABLE_FIELDS = ['title', 'description', 'priority', 'status'];
+
+// Claim is not a generic field update: taking a request is a BUSINESS
+// ACTION with a fixed outcome. The status it produces is a rule of the
+// use case, so it lives here — not in the store and not in the route.
+const CLAIM_STATUS = 'in_progress';
 
 // Fields the server controls on requests. Sending them is a contract
 // violation, answered explicitly — never silently ignored.
@@ -40,6 +47,13 @@ function notFound(id) {
 
 function forbidden(message) {
   return new AppError('forbidden', 'FORBIDDEN', message);
+}
+
+// 409: the request exists and the actor may act, but the CURRENT STATE
+// forbids the action. Distinct from 403 (who you are) and 404 (whether
+// it exists). In AppError terms this is the 'domain' category.
+function conflict(code, message) {
+  return new AppError('domain', code, message);
 }
 
 function rejectServerControlledFields(body, extra = []) {
@@ -230,3 +244,57 @@ export async function patchRequest(actor, id, body) {
   return mapRequestRow(row);
 }
 
+// ─────────────────────────────────────────────────────────────────────
+// FEATURE-801 · claim
+//
+// An ACTION, not a PATCH. It derives the identity from the token, runs a
+// rule that needs the current state, and writes TWO things that must
+// never disagree: the assignment and the history event. One transaction,
+// one client — if the history insert fails, the assignment is rolled back
+// with it.
+// ─────────────────────────────────────────────────────────────────────
+export async function claimRequest(actor, id, body) {
+  // assignedTo is decided by the server from the authenticated identity.
+  // Sending it is a contract violation, answered explicitly.
+  rejectServerControlledFields(body, ['assignedTo']);
+
+  const row = await withTransaction(async (client) => {
+    // 1. Existence first: a claim on a request that is not there is a
+    //    404 before any rule runs.
+    const current = await findById(id, client);
+    if (!current) throw notFound(id);
+
+    // 2. The rule, over plain objects. The policy names WHY it denies;
+    //    the service decides what each reason means over HTTP.
+    const request = mapRequestRow(current);
+    const decision = canClaimRequest({ actor, request });
+
+    if (!decision.allowed) {
+      if (decision.reason === 'NOT_AGENT') {
+        throw forbidden('Only agents can claim a request.');
+      }
+      if (decision.reason === 'ALREADY_ASSIGNED') {
+        throw conflict('REQUEST_ALREADY_ASSIGNED', 'The request is already assigned.');
+      }
+      throw conflict('REQUEST_NOT_OPEN',
+        `Request ${id} is ${request.status} and cannot be claimed.`);
+    }
+
+    // 3. The write: ONE statement that assigns, moves the status and
+    //    refreshes updated_at. Not two UPDATEs that can disagree.
+    const updated = await claimRequestRow(id, actor.userId, CLAIM_STATUS, client);
+
+    // 4. The trail, with the same client — same unit of work.
+    await insertHistoryEvent({
+      requestId: id,
+      type: 'request_claimed',
+      fromStatus: current.status,
+      toStatus: CLAIM_STATUS,
+      changedBy: actor.userId
+    }, client);
+
+    return updated;
+  });
+
+  return mapRequestRow(row);
+}

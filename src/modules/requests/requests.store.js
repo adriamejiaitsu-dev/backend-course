@@ -12,6 +12,7 @@ const REQUEST_COLUMNS = `
   priority,
   status,
   created_by,
+  assigned_to,
   created_at,
   updated_at
 `;
@@ -85,6 +86,22 @@ export async function updateRequest(id, changes, db = pool) {
      WHERE id = $${values.length}
      RETURNING ${REQUEST_COLUMNS}`,
     values
+  );
+  return result.rows[0] ?? null;
+}
+
+// FEATURE-801: claiming is ONE write, not two. Assignment and status
+// change in a single statement, so there is no instant in which the row
+// says one agent is responsible and the status still reads 'open'.
+// The status is decided by the service — the store only knows how to
+// persist it, never WHEN a claim is legal.
+export async function claimRequest(id, agentId, status, db = pool) {
+  const result = await db.query(
+    `UPDATE requests
+     SET assigned_to = $2, status = $3, updated_at = CURRENT_TIMESTAMP
+     WHERE id = $1
+     RETURNING ${REQUEST_COLUMNS}`,
+    [id, agentId, status]
   );
   return result.rows[0] ?? null;
 }

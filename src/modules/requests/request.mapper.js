@@ -10,6 +10,10 @@ export function mapRequestRow(row) {
     priority: row.priority,
     status: row.status,
     createdBy: row.created_by,
+    // FEATURE-801. NULL means "nobody has claimed it", and the contract
+    // promises a null there — not an absent field. Normalizing keeps the
+    // shape stable for every request, assigned or not.
+    assignedTo: row.assigned_to ?? null,
     createdAt: row.created_at,
     updatedAt: row.updated_at
   };
