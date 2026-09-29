@@ -1,10 +1,59 @@
-Pega aquí la salida REAL y COMPLETA de:
+Salida REAL de `npm run validate:class-08` en este proyecto.
 
-    npm run validate:class-08
+Revisado antes de guardar: no aparece ninguna credencial — ni DATABASE_URL,
+ni JWT_SECRET, ni tokens. El validador nunca los imprime.
 
-Debe incluir las 12 verificaciones con sus secciones (Baseline, Claim
-request, Boundaries), la línea de Cleanup y el FINAL RESULT.
+> class-08-request-api@8.0.0 validate:class-08
+> node scripts/validate-class-08.js
 
-Antes de guardar, revisa que no haya ninguna credencial pegada por error:
-ni DATABASE_URL, ni JWT_SECRET, ni tokens. Si aparece algo así,
-reemplázalo por [REDACTED].
+CLASS 08 ARCHITECTURE VALIDATION
+
+Baseline
+[01/12] Previous behavior preserved .......... PASS
+[02/12] Existing tests pass .................. PASS
+
+Claim request
+[03/12] Authentication required .............. PASS
+[04/12] Requester cannot claim ............... PASS
+[05/12] Agent can claim open request ......... PASS
+[06/12] Agent id comes from token ............ PASS
+[07/12] Request becomes in_progress .......... PASS
+[08/12] Second claim returns conflict ........ PASS
+[09/12] Terminal request cannot be claimed ... PASS
+[10/12] History event is created ............. PASS
+
+Boundaries
+[11/12] Routes contain no SQL ................ PASS
+[12/12] Service does not depend on Express ... PASS
+
+Cleanup
+Temporary validation data removed successfully.
+
+FINAL RESULT: PASSED
+
+
+--------------------------------------------------------------------------------
+Salida REAL de `npm test` (la red que protects el refactor):
+
+$ node --test --test-concurrency=1 "test/*.test.js"
+
+ℹ tests 57
+ℹ suites 0
+ℹ pass 57
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19645.2527
+
+--------------------------------------------------------------------------------
+Nota de portabilidad (Windows)
+
+El script `npm test` del starter usa comillas simples: `node --test
+'test/*.test.js'`. En Windows cmd.exe NO elimina las comillas simples y el
+patrón llega literal a Node, que encuentra 0 archivos. Por eso la corrida de
+arriba usa comillas dobles. En Linux/macOS (donde corre el validador, con
+`shell: '/bin/bash'`) las comillas simples funcionan tal cual y el script
+original no necesita cambios.
+
+Este NO es un defecto del código del taller: es del shell de Windows.
