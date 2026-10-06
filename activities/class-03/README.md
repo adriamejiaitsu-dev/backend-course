@@ -50,6 +50,22 @@ npm start
 | Diseño guardado    | tag `class-03-design`    |
 | Entrega completada | tag `class-03-submission`|
 
+Recorrido de los commits: diseño → migración de estructura sin cambiar comportamiento →
+`request-status.js` → contrato de creación → `PATCH` con 409 → filtros → formato de error
+unificado → uso de IA → decisión 001 → matriz ejecutada → reflexión.
+
+## Verificación
+
+15 peticiones `curl` ejecutadas el 06/10/2026 contra el servidor corriendo: los 8 casos base
+y los 6 propios de `test-matrix.md` coincidieron con lo esperado, incluida la evidencia
+literal de `409 INVALID_STATUS_TRANSITION` y `409 REQUEST_IN_TERMINAL_STATUS`. Para repetir:
+
+```bash
+cd project
+npm start
+# en otra terminal, cada caso de la matriz con curl -i
+```
+
 ## Alcance y exclusiones
 
 Cuatro endpoints (`GET /requests`, `GET /requests/:id`, `POST /requests`,
