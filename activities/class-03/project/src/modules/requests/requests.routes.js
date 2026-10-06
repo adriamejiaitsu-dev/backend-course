@@ -17,13 +17,19 @@ const MODIFIABLE_FIELDS = ['title', 'description', 'priority', 'status'];
 // This router is mounted at /requests in app.js, so '/' here means GET /requests.
 
 router.get('/', (req, res) => {
-  const { status } = req.query;
+  const { status, priority } = req.query;
 
+  // An unknown filter value is a client mistake, not an empty result:
+  // returning [] would hide it.
   if (status !== undefined && !isKnownStatus(status)) {
     return res.status(400).json({ error: `Unknown status value "${status}"` });
   }
 
-  res.status(200).json(listRequests({ status }));
+  if (priority !== undefined && !PRIORITIES.includes(priority)) {
+    return res.status(400).json({ error: `Unknown priority value "${priority}"` });
+  }
+
+  res.status(200).json(listRequests({ status, priority }));
 });
 
 router.get('/:id', (req, res) => {

@@ -43,10 +43,14 @@ const requests = [
 // it does not repeat ids while the process lives, and it restarts on every reboot.
 let nextId = 4;
 
-// Returns every request, optionally narrowed by known status values.
+// Returns every request, narrowed by the filters the collection supports.
+// Both filters are optional and combine: an empty result is still a 200.
 export function listRequests(filters = {}) {
   return requests.filter((request) => {
     if (filters.status !== undefined && request.status !== filters.status) {
+      return false;
+    }
+    if (filters.priority !== undefined && request.priority !== filters.priority) {
       return false;
     }
     return true;
