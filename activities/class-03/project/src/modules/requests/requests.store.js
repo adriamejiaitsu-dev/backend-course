@@ -1,5 +1,8 @@
 // In-memory storage. There is no database: the data resets on every restart.
-export const requests = [
+// This file administers the array and the identity of the requests. It does not
+// know what an HTTP status code is.
+
+const requests = [
   {
     id: 1,
     title: 'Projector does not turn on',
@@ -11,7 +14,7 @@ export const requests = [
     id: 2,
     title: 'Broken chair in the lab',
     description: 'One chair in the computer lab has a loose back rest.',
-    status: 'in-progress',
+    status: 'in_progress',
     priority: 'medium'
   },
   {
@@ -23,12 +26,35 @@ export const requests = [
   }
 ];
 
-// Identifier for the next request that gets created.
+// Identifier for the next request that gets created. It only moves forward:
+// it does not repeat ids while the process lives, and it restarts on every reboot.
 let nextId = 4;
 
-// Returns a fresh identifier and prepares the following one.
-export function generateId() {
-  const id = nextId;
+// Returns every request, optionally narrowed by known status values.
+export function listRequests(filters = {}) {
+  return requests.filter((request) => {
+    if (filters.status !== undefined && request.status !== filters.status) {
+      return false;
+    }
+    return true;
+  });
+}
+
+export function getRequestById(id) {
+  return requests.find((request) => request.id === id);
+}
+
+export function createRequest(fields) {
+  const newRequest = {
+    id: nextId,
+    title: fields.title,
+    description: fields.description,
+    status: 'open',
+    priority: fields.priority
+  };
+
   nextId = nextId + 1;
-  return id;
+  requests.push(newRequest);
+
+  return newRequest;
 }
