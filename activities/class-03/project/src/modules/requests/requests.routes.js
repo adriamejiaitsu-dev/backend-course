@@ -1,5 +1,5 @@
 import express from 'express';
-import { listRequests, getRequestById, createRequest } from './requests.store.js';
+import { listRequests, getRequestById, createRequest, PRIORITIES } from './requests.store.js';
 import { isKnownStatus } from './request-status.js';
 
 const router = express.Router();
@@ -28,16 +28,27 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const title = typeof req.body?.title === 'string' ? req.body.title.trim() : '';
+  const body = req.body ?? {};
 
+  const title = typeof body.title === 'string' ? body.title.trim() : '';
   if (!title) {
     return res.status(400).json({ error: 'Title is required' });
   }
 
+  if (body.priority !== undefined && !PRIORITIES.includes(body.priority)) {
+    return res.status(400).json({ error: `Unknown priority value "${body.priority}"` });
+  }
+
+  if (body.description !== undefined && typeof body.description !== 'string') {
+    return res.status(400).json({ error: 'Description must be a string' });
+  }
+
+  // id, status, createdAt, updatedAt and any unknown field are dropped on purpose:
+  // the server owns them. The contract documents this as "ignored", not "rejected".
   const newRequest = createRequest({
     title,
-    description: req.body.description,
-    priority: req.body.priority
+    description: body.description,
+    priority: body.priority
   });
 
   res.status(201).json(newRequest);
