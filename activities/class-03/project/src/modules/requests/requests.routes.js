@@ -14,6 +14,12 @@ const router = express.Router();
 // here: they are ignored when they arrive, never applied.
 const MODIFIABLE_FIELDS = ['title', 'description', 'priority', 'status'];
 
+// Every failure of this API answers with the same shape: a code for programs and
+// a message for people. No handler builds an error body by hand.
+function sendError(res, status, code, message) {
+  return res.status(status).json({ error: { code, message } });
+}
+
 // This router is mounted at /requests in app.js, so '/' here means GET /requests.
 
 router.get('/', (req, res) => {
@@ -22,11 +28,11 @@ router.get('/', (req, res) => {
   // An unknown filter value is a client mistake, not an empty result:
   // returning [] would hide it.
   if (status !== undefined && !isKnownStatus(status)) {
-    return res.status(400).json({ error: `Unknown status value "${status}"` });
+    return sendError(res, 400, 'INVALID_FILTER_VALUE', `Unknown status value "${status}"`);
   }
 
   if (priority !== undefined && !PRIORITIES.includes(priority)) {
-    return res.status(400).json({ error: `Unknown priority value "${priority}"` });
+    return sendError(res, 400, 'INVALID_FILTER_VALUE', `Unknown priority value "${priority}"`);
   }
 
   res.status(200).json(listRequests({ status, priority }));
@@ -37,7 +43,7 @@ router.get('/:id', (req, res) => {
   const request = getRequestById(id);
 
   if (!request) {
-    return res.status(404).json({ error: 'Request not found' });
+    return sendError(res, 404, 'REQUEST_NOT_FOUND', `Request ${req.params.id} not found`);
   }
 
   res.status(200).json(request);
@@ -48,15 +54,15 @@ router.post('/', (req, res) => {
 
   const title = typeof body.title === 'string' ? body.title.trim() : '';
   if (!title) {
-    return res.status(400).json({ error: 'Title is required' });
+    return sendError(res, 400, 'TITLE_REQUIRED', 'Title is required');
   }
 
   if (body.priority !== undefined && !PRIORITIES.includes(body.priority)) {
-    return res.status(400).json({ error: `Unknown priority value "${body.priority}"` });
+    return sendError(res, 400, 'INVALID_PRIORITY_VALUE', `Unknown priority value "${body.priority}"`);
   }
 
   if (body.description !== undefined && typeof body.description !== 'string') {
-    return res.status(400).json({ error: 'Description must be a string' });
+    return sendError(res, 400, 'INVALID_DESCRIPTION_VALUE', 'Description must be a string');
   }
 
   // id, status, createdAt, updatedAt and any unknown field are dropped on purpose:
@@ -77,31 +83,35 @@ router.patch('/:id', (req, res) => {
   // 1. Shape first: the request is judged on its own before any state is read.
   const sentFields = MODIFIABLE_FIELDS.filter((field) => body[field] !== undefined);
   if (sentFields.length === 0) {
-    return res.status(400).json({
-      error: 'Patch body requires at least one of: title, description, priority, status'
-    });
+    return sendError(
+      res,
+      400,
+      'EMPTY_PATCH_BODY',
+      'Patch body requires at least one of: title, description, priority, status'
+    );
   }
 
   if (body.title !== undefined) {
     const title = typeof body.title === 'string' ? body.title.trim() : '';
     if (!title) {
-      return res.status(400).json({ error: 'Title is required' });
+      return sendError(res, 400, 'TITLE_REQUIRED', 'Title is required');
     }
   }
 
   if (body.description !== undefined && typeof body.description !== 'string') {
-    return res.status(400).json({ error: 'Description must be a string' });
+    return sendError(res, 400, 'INVALID_DESCRIPTION_VALUE', 'Description must be a string');
   }
 
   if (body.priority !== undefined && !PRIORITIES.includes(body.priority)) {
-    return res.status(400).json({ error: `Unknown priority value "${body.priority}"` });
+    return sendError(res, 400, 'INVALID_PRIORITY_VALUE', `Unknown priority value "${body.priority}"`);
   }
 
   if (body.status !== undefined && !isKnownStatus(body.status)) {
-    return res.status(400).json({ error: `Unknown status value "${body.status}"` });
+    return sendError(res, 400, 'INVALID_STATUS_VALUE', `Unknown status value "${body.status}"`);
   }
 
-  // 2. Then the resource, 3. then the rule (409) — both decided by the store.
+  // 2. Then the resource, 3. then the rule. The store decides both and returns a
+  // domain outcome; this layer only translates it into HTTP.
   const outcome = updateRequest(id, {
     title: body.title,
     description: body.description,
@@ -110,10 +120,8 @@ router.patch('/:id', (req, res) => {
   });
 
   if (!outcome.ok) {
-    if (outcome.code === 'REQUEST_NOT_FOUND') {
-      return res.status(404).json({ error: outcome.message });
-    }
-    return res.status(409).json({ error: outcome.message });
+    const status = outcome.code === 'REQUEST_NOT_FOUND' ? 404 : 409;
+    return sendError(res, status, outcome.code, outcome.message);
   }
 
   res.status(200).json(outcome.request);
