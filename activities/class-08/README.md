@@ -132,3 +132,44 @@ asignada — el seed la reclama por ti para que veas el escenario completo.
 
 Tu `DATABASE_URL` y tu `JWT_SECRET` siguen siendo secretos reales: jamás
 en commits, chats ni capturas — y jamás dentro del paquete de evidencia.
+
+## Qué contiene esta carpeta
+
+| Archivo | Contenido |
+| --- | --- |
+| `entrega-08.md` | Checklist de la entrega (consigna de referencia). |
+| `responsibility-map.md` | Clasificación del handler cargado, hecha antes del refactor. |
+| `refactor-log.md` | Cada paso del refactor con el resultado de la suite. |
+| `class-08-evidence.md` | Evidencia del tema 8 para el checkpoint de la próxima clase. |
+| `validation-evidence.txt` | Salida real de `npm run validate:class-08` en PASSED. |
+| `course-progress-evidence-01-07.md` | Paquete del checkpoint 1-7 (generado, ver *Pendientes*). |
+| `ai-self-evaluation-01-07.md` | Salida de la autoevaluación 1-7 (ver *Pendientes*). |
+| `ai-knowledge-exam-01-07.md` | Transcript del examen de conocimiento (ver *Pendientes*). |
+| `src/`, `test/`, `database/`, `scripts/`, `tickets/`, `self-evaluation/` | El proyecto del taller. |
+
+Ejecutar desde esta misma carpeta: `npm install` y los comandos de la tabla
+*Comandos del taller*.
+
+## AI usage
+
+Reglas aplicadas durante el taller: [Reglas para trabajar con IA](#reglas-para-trabajar-con-ia)
+— la IA clasificó el handler y detectó acoplamiento, pero no creó capas nuevas ni tocó
+rutas, status, bodies ni permisos; toda propuesta se contrastó contra la suite.
+
+Registro completo (qué se pidió, qué se aceptó, qué se rechazó y cómo se verificó):
+**[COMPLETAR]** — redactarlo con los ejemplos concretos de tu refactor y de FEATURE-801.
+
+## Pendientes de esta entrega
+
+* `course-progress-evidence-01-07.md` — generado con `npm run progress:checkpoint`;
+  falta tu `studentId` y las **7 respuestas**.
+* `ai-self-evaluation-01-07.md` — todavía es la plantilla: pegar la salida íntegra de la
+  única ejecución del prompt y responder las 4 preguntas de metacognición.
+* `ai-knowledge-exam-01-07.md` — todavía es la plantilla: pegar el transcript completo del
+  examen y sus bloques de cierre.
+
+## Reflexión
+
+**[COMPLETAR]** — con el proyecto abierto: qué cambió tu forma de hacer un cambio pequeño
+(el refactor con red de pruebas, la frontera de un módulo, la transacción con historial) y
+qué aprendiste al leer un reporte de IA en vez de aceptarlo.
