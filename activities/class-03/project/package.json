@@ -1,0 +1,14 @@
+{
+  "name": "request-api-v3",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Request API v3: recursos, estado y reglas (Entrega 03 - Desarrollo Backend)",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
