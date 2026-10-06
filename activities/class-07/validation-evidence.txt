@@ -1,0 +1,30 @@
+﻿
+> class-07-request-api@7.0.0 validate:class-07
+> node scripts/validate-class-07.js
+
+CLASS 07 INCIDENT VALIDATION
+
+Baseline
+[01/12] Existing contract preserved .......... PASS
+
+Input and errors
+[02/12] Invalid id returns 400 ............... PASS
+[03/12] Invalid priority returns 400 ......... PASS
+[04/12] Unknown request returns 404 .......... PASS
+[05/12] Invalid transition returns 409 ....... PASS
+[06/12] Unexpected errors return 500 ......... PASS
+[07/12] Internal details remain hidden ....... PASS
+
+Traceability
+[08/12] Response contains request id ......... PASS
+[09/12] Log contains the same request id ..... PASS
+[10/12] Authorization header is not logged ... PASS
+
+Operation
+[11/12] Health endpoint responds ............. PASS
+[12/12] Readiness checks PostgreSQL .......... PASS
+
+Cleanup
+Temporary validation data removed successfully.
+
+FINAL RESULT: PASSED
