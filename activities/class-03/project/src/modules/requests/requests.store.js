@@ -2,6 +2,8 @@
 // This file administers the array and the identity of the requests. It does not
 // know what an HTTP status code is.
 
+import { checkUpdate } from './request-status.js';
+
 // Closed list of values the priority field can take. When it does not arrive,
 // the server applies the default.
 export const PRIORITIES = Object.freeze(['low', 'medium', 'high']);
@@ -75,4 +77,38 @@ export function createRequest(fields) {
   requests.push(newRequest);
 
   return newRequest;
+}
+
+// Partial update. The store applies the change only after the lifecycle rule
+// accepts it: a terminal request does not move, and a status change must exist
+// in the transition map. It answers with a domain outcome, never with an HTTP code.
+export function updateRequest(id, patch) {
+  const request = getRequestById(id);
+
+  if (!request) {
+    return { ok: false, code: 'REQUEST_NOT_FOUND', message: `Request ${id} not found` };
+  }
+
+  const decision = checkUpdate(request.status, patch.status);
+
+  if (!decision.ok) {
+    return { ok: false, code: decision.code, message: decision.message };
+  }
+
+  if (patch.title !== undefined) {
+    request.title = patch.title;
+  }
+  if (patch.description !== undefined) {
+    request.description = patch.description;
+  }
+  if (patch.priority !== undefined) {
+    request.priority = patch.priority;
+  }
+  if (patch.status !== undefined) {
+    request.status = patch.status;
+  }
+
+  request.updatedAt = new Date().toISOString();
+
+  return { ok: true, request };
 }
