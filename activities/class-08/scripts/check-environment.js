@@ -183,7 +183,7 @@ report('Test runner available', Number.isInteger(major) && major >= 20);
 const kit = ['self-evaluation/ITSU-CHECKPOINT-01-07-1.0.md',
   'self-evaluation/rubric-classes-01-07.md',
   'self-evaluation/report-schema.json',
-  'activities/class-08'];
+  'tickets/FEATURE-801.md'];
 report('Self-evaluation kit available',
   kit.every((rel) => existsSync(path.join(ROOT, rel))));
 

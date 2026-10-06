@@ -1,5 +1,5 @@
 // Progress package builder — cumulative checkpoint, classes 1-7.
-// Builds activities/class-08/course-progress-evidence-01-07.md by scanning
+// Builds course-progress-evidence-01-07.md by scanning
 // the student's course repository for KNOWN artifacts of each class.
 //
 // Honesty rules (they matter more than completeness):
@@ -240,7 +240,7 @@ out.push('posibles secretos. Revisa una vez más antes de pegarlo en un modelo:'
 out.push('si ves una credencial real, reemplázala por [REDACTED] y avisa al docente.');
 out.push('');
 
-const target = path.join(PROJECT_ROOT, 'activities', 'class-08', 'course-progress-evidence-01-07.md');
+const target = path.join(PROJECT_ROOT, 'course-progress-evidence-01-07.md');
 mkdirSync(path.dirname(target), { recursive: true });
 writeFileSync(target, out.join('\n'));
 
@@ -257,6 +257,6 @@ console.log('Siguientes pasos:');
 console.log('1. Abre el paquete y completa studentId y las 7 respuestas [COMPLETAR].');
 console.log('2. Copia el prompt de self-evaluation/ITSU-CHECKPOINT-01-07-1.0.md.');
 console.log('3. Pega prompt + paquete en UNA sola conversación con el modelo.');
-console.log('4. Guarda RESULT_CODE, JSON y reporte en activities/class-08/ai-self-evaluation-01-07.md.');
+console.log('4. Guarda RESULT_CODE, JSON y reporte en ai-self-evaluation-01-07.md.');
 console.log('5. Al terminar cada bloque del taller: git add -A && git commit && git push.');
 console.log('   Lo que no está en TU repositorio remoto no existe para la evaluación.');

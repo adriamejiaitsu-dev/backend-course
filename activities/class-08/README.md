@@ -30,20 +30,20 @@ npm run progress:checkpoint
    imprime el remoto detectado — revísalo. ¿Git te da pelea? El lab
    "Supervivencia git en máquina compartida" (sesión 1 de la clase)
    tiene el ritual completo y los rescates.
-1. Abre `activities/class-08/course-progress-evidence-01-07.md`, completa
+1. Abre `course-progress-evidence-01-07.md`, completa
    tu `studentId` y las **siete respuestas breves** (3-6 líneas cada una).
 2. Copia entero el prompt de `self-evaluation/ITSU-CHECKPOINT-01-07-1.0.md`.
 3. Pégalo en el modelo de IA que tengas disponible, con el paquete dentro
    de los marcadores BEGIN_EVIDENCE / END_EVIDENCE. **Una sola conversación.**
 4. Guarda la salida completa (RESULT_CODE + JSON + reporte + feedback) en
-   `activities/class-08/ai-self-evaluation-01-07.md`, sin editar, y
+   `ai-self-evaluation-01-07.md`, sin editar, y
    responde las 4 preguntas de metacognición del final.
 
 5. **Segunda ejecución — el examen de conocimiento**: en una conversación
    NUEVA, copia el prompt de `self-evaluation/ITSU-KNOWLEDGE-01-07-1.0.md`,
    escribe COMENZAR y responde las 7 preguntas (con repreguntas) DE
    MEMORIA, sin material abierto. Guarda el transcript completo en
-   `activities/class-08/ai-knowledge-exam-01-07.md`.
+   `ai-knowledge-exam-01-07.md`.
 
 Si el modelo devuelve un formato inválido: conserva la respuesta, ejecuta
 el prompt de reparación UNA vez (`self-evaluation/repair-prompt.md`), y si vuelve a
@@ -108,8 +108,8 @@ está en TU GitHub no existe para la evaluación.
 ## Los archivos del ticket
 
 * `tickets/FEATURE-801.md` — el contrato completo y la matriz.
-* `activities/class-08/responsibility-map.md` — tu análisis del handler cargado.
-* `activities/class-08/refactor-log.md` — cada paso del refactor con su suite.
+* `responsibility-map.md` — tu análisis del handler cargado.
+* `refactor-log.md` — cada paso del refactor con su suite.
 * `database/migrations/005_add_request_assignment.sql` — léela: NULL, FK y CHECK ampliado.
 
 ## Reglas para trabajar con IA
