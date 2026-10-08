@@ -35,10 +35,14 @@ try {
     report(expected, found.includes(expected) ? 'present' : 'MISSING (run migrations)');
   }
 
-  const requests = await pool.query('SELECT COUNT(*)::int AS n FROM requests');
-  const history = await pool.query('SELECT COUNT(*)::int AS n FROM request_status_history');
-  report('requests count', String(requests.rows[0].n));
-  report('status history count', String(history.rows[0].n));
+  if (found.includes('requests')) {
+    const requests = await pool.query('SELECT COUNT(*)::int AS n FROM requests');
+    report('requests count', String(requests.rows[0].n));
+  }
+  if (found.includes('request_status_history')) {
+    const history = await pool.query('SELECT COUNT(*)::int AS n FROM request_status_history');
+    report('status history count', String(history.rows[0].n));
+  }
 
   console.log('db:check OK');
   process.exitCode = 0;

@@ -33,8 +33,11 @@ const UNAVAILABLE_ERRNOS = new Set([
 export function isUnavailable(error) {
   if (!error) return false;
   if (UNAVAILABLE_SQLSTATES.has(error.code)) return true;
-  if (error.errno !== undefined && UNAVAILABLE_ERRNOS.has(error.errno)) return true;
-  return /connection terminated|timeout expired|could not connect|getaddrinfo|other end closed|Connection refused/i.test(
+  // Operating-system failures: node-postgres sets err.code to the errno name
+  // (e.g. ECONNREFUSED) and err.errno to a negative number.
+  if (UNAVAILABLE_ERRNOS.has(error.code)) return true;
+  if (typeof error.errno === 'number' && error.errno < 0) return true;
+  return /Connection refused|connect ECONNREFUSED|timeout expired|could not connect|getaddrinfo|other end closed|Connection terminated/i.test(
     String(error.message ?? '')
   );
 }
@@ -67,8 +70,9 @@ const PG_SQLSTATE_MAP = {
 
 export function translate(error) {
   if (!error) return error;
-  if (error.code && typeof error.code === 'string' && /^[A-Z][A-Z_]*$/.test(error.code)) {
-    return error; // already one of ours
+  // One of ours already (always carries a numeric HTTP status): pass it through.
+  if (Number.isInteger(error.status) && error.code && /^[A-Z][A-Z_]*$/.test(error.code)) {
+    return error;
   }
   if (isUnavailable(error)) return databaseError(error);
   if (error.code === '22P02') {
