@@ -24,7 +24,7 @@ Todas responden `{ "error": { "code", "message" } }` — el formato de la clase 
 | Falta `title` al crear | Contrato | `400` | `TITLE_REQUIRED` |
 | Prioridad desconocida | Contrato | `400` | `INVALID_PRIORITY_VALUE` |
 | Filtro con valor desconocido | Contrato | `400` | `INVALID_FILTER_VALUE` |
-| `:id` no numérico en la URL | Contrato | `400` | `INVALID_REQUEST_ID` |
+| `:id` no numérico en la URL | Contrato | `404` | `REQUEST_NOT_FOUND`
 | `PATCH` sin campos modificables | Contrato | `400` | `EMPTY_PATCH_BODY` |
 | Solicitud inexistente | Recurso | `404` | `REQUEST_NOT_FOUND` |
 | Ruta desconocida | Recurso | `404` | `ROUTE_NOT_FOUND` |
@@ -39,9 +39,11 @@ Todas responden `{ "error": { "code", "message" } }` — el formato de la clase 
 Notas de decisión:
 
 * **`id` no numérico**: en la clase 3 eso producía un `404` porque la búsqueda en memoria
-  simplemente no lo encontraba. Con SQL, `WHERE id = 'abc'` lanzaría `22P02`
-  (`invalid_text_representation`); se intercepta antes, en la ruta, para no filtrar el
-  error crudo de pg y para que la respuesta siga siendo de contrato.
+  simplemente no lo encontraba. El contrato v3 se mantiene intacto: la ruta responde `404
+  REQUEST_NOT_FOUND` sin consultar ("no hay recurso con esa forma"). Con SQL, `WHERE id =
+  'abc'` lanzaría `22P02` (`invalid_text_representation`); para que eso jamás ocurra por
+  accidente, `database/pool.js` traduce `22P02` a `400 INVALID_REQUEST_ID` como **red de
+  seguridad interna** (código que el cliente no debería ver por la ruta normal).
 * **La base no distingue "desconocido" de "prohibido"**: por eso los `409` siguen
   decidiéndolos la máquina de estados en la aplicación, y la base solo sería el respaldo
   si un valor escapara al `CHECK`.

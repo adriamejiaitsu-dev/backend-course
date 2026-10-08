@@ -26,7 +26,7 @@
 | `status` enviado al crear | — | `POST /requests` con `{"title":"…","status":"closed"}` | `201` con `status:"open"`: el servidor ignora el intento | _(fase 6)_ |
 | Filtro combinado | Datos con estados y prioridades mezclados | `GET /requests?status=open&priority=high` | `200` solo con las filas que cumplen ambas | _(fase 6)_ |
 | SQL injection literales en el título | — | `POST /requests` con `title = "x'; DROP TABLE requests; --"` | `201` y el título guardado tal cual; `requests` sigue existiendo | _(fase 6)_ |
-| `:id` no numérico | — | `GET /requests/abc` | `400` `INVALID_REQUEST_ID` (no un `500` de pg) | _(fase 6)_ |
+| `:id` no numérico | — | `GET /requests/abc` | `404` `REQUEST_NOT_FOUND` (contrato v3 intacto, no un `500` de pg) | _(fase 6)_ |
 
 ## Evidencia clave (texto, sin secretos)
 
